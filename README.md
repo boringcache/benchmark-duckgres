@@ -49,6 +49,28 @@ real image-building history rather than an arbitrary three-commit sample:
 | `d94730966803998856c3ef9fc66c2d1720d5a739` | [run 30048412994](https://github.com/PostHog/duckgres/actions/runs/30048412994) |
 | `b9823d4336b244857185888952f4a3086cceda3a` | [run 30085493243](https://github.com/PostHog/duckgres/actions/runs/30085493243) |
 
+## Measured Result
+
+All rows below ran on GitHub-hosted `ubuntu-latest` runners and built the
+unchanged upstream Dockerfile. Total time includes cache setup and the
+measured Docker build.
+
+| Revision | GHA | BoringCache | Saved | GHA export | BoringCache export |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [oldest](https://github.com/boringcache/benchmark-duckgres/actions/runs/30086951894) | 341s | 195s | 146s (43%) | 147.0s | 2.1s |
+| [middle](https://github.com/boringcache/benchmark-duckgres/actions/runs/30087337296) | 318s | 210s | 108s (34%) | 123.2s | 1.8s |
+| [newest](https://github.com/boringcache/benchmark-duckgres/actions/runs/30087850987) | 263s | 204s | 59s (22%) | 76.1s | 1.8s |
+
+Across the three real commits, BoringCache averaged 203 seconds versus 307
+seconds for GHA, a 34% reduction. GHA spent an average of 115 seconds exporting
+cache after the build; BoringCache averaged 1.9 seconds.
+
+The final [fresh comparison](https://github.com/boringcache/benchmark-duckgres/actions/runs/30088155935)
+measured a 387-second GHA cold run versus 260 seconds with BoringCache. The
+same-source warm reruns were effectively instant in both lanes: 3 seconds for
+GHA and 4 seconds for BoringCache. The value is therefore the recurring
+publish path on changed commits, not an exaggerated same-commit warm claim.
+
 ## Scenarios
 
 - `cold`

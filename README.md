@@ -37,6 +37,18 @@ Pinned upstream source:
 
 - see committed `upstream/` submodule on `main`
 
+## Rolling Proof Series
+
+The benchmark replays these three linear `main` commits oldest to newest.
+Each commit has a successful upstream `Container Image CD` run, so this is
+real image-building history rather than an arbitrary three-commit sample:
+
+| Commit | Upstream proof |
+| --- | --- |
+| `95050973c56b7876488a209bfa7c328cec71fe83` | [run 30022289969](https://github.com/PostHog/duckgres/actions/runs/30022289969) |
+| `d94730966803998856c3ef9fc66c2d1720d5a739` | [run 30048412994](https://github.com/PostHog/duckgres/actions/runs/30048412994) |
+| `b9823d4336b244857185888952f4a3086cceda3a` | [run 30085493243](https://github.com/PostHog/duckgres/actions/runs/30085493243) |
+
 ## Scenarios
 
 - `cold`
@@ -44,15 +56,11 @@ Pinned upstream source:
 
 Fresh lane runs a no-prior-cache cold build plus one warm rerun on the same pinned source tree. Rolling lane records the upstream commit build as-is after each upstream sync against the prior rolling cache and skips `warm1`.
 
-BoringCache compares the explicit registry/OCI cache path and the managed
-BuildKit backend path. It does not call BoringCache inside Dockerfile `RUN`
-steps, and upstream Dockerfile cache mounts stay native to BuildKit. Docker
-tool-cache lanes are intentionally absent until Duckgres has a static supported
-adapter for its in-Docker Go build cache shape.
-
-The ECR comparison is optional and stays skipped until the benchmark repo has
-the existing Docker benchmark ECR variables. The required proof is GHA versus
-BoringCache; ECR is useful context, not a prerequisite.
+The two-entry matrix compares GitHub Actions cache with BoringCache managed
+BuildKit. It does not call BoringCache inside Dockerfile `RUN` steps, and
+upstream Dockerfile cache mounts stay native to BuildKit. Docker tool-cache
+lanes are intentionally absent until Duckgres has a static supported adapter
+for its in-Docker Go build cache shape.
 
 ## Output
 

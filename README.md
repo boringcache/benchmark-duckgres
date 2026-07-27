@@ -2,6 +2,9 @@
 
 Isolated Duckgres benchmark runner for BoringCache vs GitHub Actions cache.
 
+Stable BoringCache workflows install the verified CLI `v1.14.0` release;
+canary dispatches must use an exact immutable CLI tag.
+
 Duckgres is the first PostHog satellite benchmark because its current CD
 topology makes the cache cost visible: the main, control-plane, and worker
 workflows can run eight `type=gha,mode=max` exports for one commit. Public run
@@ -94,4 +97,3 @@ This repo uses split BoringCache tokens as the standard CI shape:
 
 - `BORINGCACHE_RESTORE_TOKEN` for read-only restore and proxy access
 - `BORINGCACHE_SAVE_TOKEN` for trusted write paths
-- `BORINGCACHE_API_TOKEN` only where a single bearer variable is still required for compatibility

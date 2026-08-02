@@ -2,7 +2,7 @@
 
 Isolated Duckgres benchmark runner for BoringCache vs GitHub Actions cache.
 
-Stable BoringCache workflows install the verified CLI `v1.16.3` release;
+Stable BoringCache workflows install the verified CLI `v1.16.4` release;
 canary dispatches must use an exact immutable CLI tag.
 
 Duckgres is the first PostHog satellite benchmark because its current CD

@@ -1,4 +1,4 @@
 workspace = "boringcache/benchmark-duckgres"
 
-# Managed BuildKit is the only BoringCache cache surface measured here, so
-# there are no archive entries to declare.
+[adapters.docker]
+tag = "duckgres-docker-local"

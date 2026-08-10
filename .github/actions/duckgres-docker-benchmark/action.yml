@@ -22,6 +22,9 @@ runs:
       run: |
         git submodule sync --recursive
         git -c protocol.version=2 submodule update --init --depth 1 --recommend-shallow --jobs 4 upstream
+    - name: Verify the upstream benchmark recipe
+      shell: bash
+      run: python3 ./scripts/verify-upstream-recipe.py
     - name: Prepare clean Duckgres source
       shell: bash
       env:
@@ -82,11 +85,12 @@ runs:
       with:
         context: upstream
         file: upstream/Dockerfile
+        platforms: linux/amd64
         tags: ghcr.io/${{ github.repository_owner }}/duckgres-benchmark:actions-cache
         push: ${{ inputs.push_image == 'true' && github.ref == 'refs/heads/main' }}
         build-args: |
-          VERSION=benchmark
-          COMMIT=benchmark
+          VERSION=build-${{ steps.scope.outputs.source_sha }}
+          COMMIT=${{ steps.scope.outputs.source_sha }}
           BUILD_TAGS=kubernetes
         provenance: false
         cache-from: type=gha,scope=${{ steps.scope.outputs.cache_scope }}
@@ -105,9 +109,10 @@ runs:
         image: ghcr.io/${{ github.repository_owner }}/duckgres-benchmark
         tags: boringcache
         push: ${{ inputs.push_image == 'true' && github.ref == 'refs/heads/main' }}
+        platforms: linux/amd64
         build-args: |
-          VERSION=benchmark
-          COMMIT=benchmark
+          VERSION=build-${{ steps.scope.outputs.source_sha }}
+          COMMIT=${{ steps.scope.outputs.source_sha }}
           BUILD_TAGS=kubernetes
         load: false
         fail-on-cache-error: true
@@ -127,9 +132,10 @@ runs:
         image: ghcr.io/${{ github.repository_owner }}/duckgres-benchmark
         tags: boringcache
         push: ${{ inputs.push_image == 'true' && github.ref == 'refs/heads/main' }}
+        platforms: linux/amd64
         build-args: |
-          VERSION=benchmark
-          COMMIT=benchmark
+          VERSION=build-${{ steps.scope.outputs.source_sha }}
+          COMMIT=${{ steps.scope.outputs.source_sha }}
           BUILD_TAGS=kubernetes
         load: false
         fail-on-cache-miss: true

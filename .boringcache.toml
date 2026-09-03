@@ -4,6 +4,12 @@ workspace = "boringcache/benchmark-duckgres"
 tag = "duckgres-docker-local"
 metadata-hints = ["benchmark=duckgres", "upstream-job=build-amd64"]
 command = [
-  "bash", "-euo", "pipefail", "-c",
-  "source_sha=$(git -C upstream rev-parse HEAD); exec docker buildx build --file upstream/Dockerfile --platform linux/amd64 --build-arg VERSION=build-${source_sha} --build-arg COMMIT=${source_sha} --build-arg BUILD_TAGS=kubernetes --tag duckgres-benchmark:local upstream",
+  "docker", "buildx", "build",
+  "--file", "upstream/Dockerfile",
+  "--platform", "linux/amd64",
+  "--build-arg", "VERSION=build-__SOURCE_SHA__",
+  "--build-arg", "COMMIT=__SOURCE_SHA__",
+  "--build-arg", "BUILD_TAGS=kubernetes",
+  "--tag", "duckgres-benchmark:local",
+  "upstream",
 ]
